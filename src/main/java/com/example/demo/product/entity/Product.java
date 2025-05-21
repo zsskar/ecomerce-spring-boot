@@ -1,6 +1,7 @@
 package com.example.demo.product.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +16,6 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Product {
 
     @Id
@@ -23,18 +23,24 @@ public class Product {
     private Long id;
 
     @Column(nullable = false, length = 100)
+    @Size(min = 2, message = "Product name must be at least 2 characters")
+    @NotNull(message = "Product name is mandatory")
     private String name;
 
     @Column(length = 255)
     private String description;
 
     @Column(nullable = false, precision = 10, scale = 2)
+    @NotNull(message = "Product price is mandatory")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Product price must be greater than zero")
     private BigDecimal price;
 
     @Column(name = "discount_percentage", precision = 5, scale = 2)
     private BigDecimal discountPercentage = BigDecimal.ZERO;
 
     @Column(name = "stock_quantity", nullable = false)
+    @NotNull(message = "Product quantity is mandatory")
+    @Min(value = 0, message = "Stock quantity must be zero or greater")
     private Integer stockQuantity;
 
     @Column(name = "created_at", updatable = false)

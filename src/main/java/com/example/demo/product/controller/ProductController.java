@@ -1,9 +1,13 @@
 package com.example.demo.product.controller;
 
+import com.example.demo.product.dto.ProductUpdateDTO;
 import com.example.demo.product.entity.Product;
 import com.example.demo.product.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,13 +29,21 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        return ResponseEntity.ok(productService.createProduct(product));
+    public ResponseEntity<?> createProduct(@Valid @RequestBody Product product, BindingResult result) {
+        if (result.hasErrors()) {
+            return ResponseEntity.badRequest().body(result.getAllErrors());
+        }
+
+        Product savedProduct = productService.createProduct(product);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product updatedProduct) {
-        return ResponseEntity.ok(productService.updateProduct(id, updatedProduct));
+    public ResponseEntity<?> updateProduct(
+            @PathVariable Long id,
+            @Valid @RequestBody ProductUpdateDTO productUpdateDTO) {
+        Product updatedProduct = productService.updateProduct(id, productUpdateDTO);
+        return ResponseEntity.ok(updatedProduct);
     }
 
 }

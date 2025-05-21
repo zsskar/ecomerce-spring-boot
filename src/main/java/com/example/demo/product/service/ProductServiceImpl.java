@@ -3,6 +3,7 @@ package com.example.demo.product.service;
 import com.example.demo.errors.EcomErrorDetails;
 import com.example.demo.errors.ErrorCodes;
 import com.example.demo.errors.ErrorMessages;
+import com.example.demo.product.dto.ProductUpdateDTO;
 import com.example.demo.product.entity.Product;
 import com.example.demo.product.repository.ProductsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -22,18 +24,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product updateProduct(Long id, Product updatedProduct) {
+    public Product updateProduct(Long id, ProductUpdateDTO productUpdateDTO) {
         return productsRepo.findById(id)
                 .map(existingProduct -> {
-                    existingProduct.setName(updatedProduct.getName());
-                    existingProduct.setDescription(updatedProduct.getDescription());
-                    existingProduct.setPrice(updatedProduct.getPrice());
+                    // Since validation is done at DTO level, we can safely update all fields
+                    existingProduct.setName(productUpdateDTO.getName());
+                    existingProduct.setDescription(productUpdateDTO.getDescription());
+                    existingProduct.setPrice(productUpdateDTO.getPrice());
                     existingProduct.setDiscountPercentage(
-                            updatedProduct.getDiscountPercentage() != null
-                                    ? updatedProduct.getDiscountPercentage()
-                                    : BigDecimal.ZERO
+                            Optional.ofNullable(productUpdateDTO.getDiscountPercentage())
+                                    .orElse(BigDecimal.ZERO)
                     );
-                    existingProduct.setStockQuantity(updatedProduct.getStockQuantity());
+                    existingProduct.setStockQuantity(productUpdateDTO.getStockQuantity());
+
                     return productsRepo.save(existingProduct);
                 })
                 .orElseThrow(() -> new EcomErrorDetails(
