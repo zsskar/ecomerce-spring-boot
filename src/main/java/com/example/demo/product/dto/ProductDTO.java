@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductUpdateDTO {
+public class ProductDTO {
     @NotNull(message = "Product name is mandatory")
     @Size(min = 2, message = "Product name must be at least 2 characters")
     private String name;

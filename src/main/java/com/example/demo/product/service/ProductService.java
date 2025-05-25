@@ -1,6 +1,6 @@
 package com.example.demo.product.service;
 
-import com.example.demo.product.dto.ProductUpdateDTO;
+import com.example.demo.product.dto.ProductDTO;
 import com.example.demo.product.entity.Product;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public interface ProductService {
     Product createProduct(Product product);
-    Product updateProduct(Long id, ProductUpdateDTO productUpdateDTO);
+    Product updateProduct(Long id, ProductDTO productDTO);
     void deleteProduct(Long id);
     Product getProductById(Long id);
     List<Product> getAllProducts();
