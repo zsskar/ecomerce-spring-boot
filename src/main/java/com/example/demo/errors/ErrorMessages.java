@@ -7,4 +7,7 @@ public class ErrorMessages {
     public static final String PRODUCT_UPDATE_FAILED = "Product update failed";
     public static final String PRODUCT_DELETION_FAILED = "Product deletion failed";
     public static final String INVALID_PRODUCT_DATA = "Invalid product data";
+    public static final String USER_NOT_FOUND = "User not found";
+    public static final String USER_CREATION_FAILED = "User creation failed";
+
 }
